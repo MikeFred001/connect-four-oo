@@ -22,24 +22,26 @@ class Game {
     this.width = width;
     this.currPlayer = 1;
     this.board = [];
+    this.makeBoard();
+    this.makeHtmlBoard();
   }
 
   makeBoard() {
     for (let y = 0; y < this.height; y++) {
       this.board.push(Array.from({ length: this.width }));
-      //console.log(this.board);
     }
-  }
 
+  }
 
   /** makeHtmlBoard: make HTML table and row of column tops. */
   makeHtmlBoard() {
     const board = document.getElementById('board');
+    board.innerHTML = '';
 
     // make column tops (clickable area for adding a piece to that column)
     const top = document.createElement('tr');
     top.setAttribute('id', 'column-top');
-    top.addEventListener('click', handleClick);
+    top.addEventListener('click', this.handleClick);
 
     for (let x = 0; x < this.width; x++) {
       const headCell = document.createElement('td');
@@ -47,7 +49,7 @@ class Game {
       top.append(headCell);
     }
 
-    this.board.append(top);
+    board.append(top);
 
     // make main part of board
     for (let y = 0; y < this.height; y++) {
@@ -59,8 +61,9 @@ class Game {
         row.append(cell);
       }
 
-      this.board.append(row);
+      board.append(row);
     }
+    console.log(board);
   }
 
 
@@ -109,7 +112,7 @@ class Game {
 
     // place piece in board and add to HTML table
     board[y][x] = this.currPlayer;
-    placeInTable(y, x);
+    this.placeInTable(y, x);
 
     // check for win
     if (checkForWin()) {
