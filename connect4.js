@@ -8,8 +8,8 @@
 // const WIDTH = 7;
 // const HEIGHT = 6;
 
-// let currPlayer = 1; // active player: 1 or 2
-// let board = []; // array of rows, each row is array of cells  (board[y][x])
+//let currPlayer = 1; // active player: 1 or 2
+//let board = []; // array of rows, each row is array of cells  (board[y][x])
 
 /** makeBoard: create in-JS board structure:
  *   board = array of rows, each row is array of cells  (board[y][x])
@@ -27,6 +27,7 @@ class Game {
   makeBoard() {
     for (let y = 0; y < this.height; y++) {
       this.board.push(Array.from({ length: this.width }));
+      //console.log(this.board);
     }
   }
 
@@ -46,7 +47,7 @@ class Game {
       top.append(headCell);
     }
 
-    board.append(top);
+    this.board.append(top);
 
     // make main part of board
     for (let y = 0; y < this.height; y++) {
@@ -58,7 +59,7 @@ class Game {
         row.append(cell);
       }
 
-      board.append(row);
+      this.board.append(row);
     }
   }
 
@@ -80,7 +81,7 @@ class Game {
   placeInTable(y, x) {
     const piece = document.createElement('div');
     piece.classList.add('piece');
-    piece.classList.add(`p${currPlayer}`);
+    piece.classList.add(`p${this.currPlayer}`);
     piece.style.top = -50 * (y + 2);
 
     const spot = document.getElementById(`c-${y}-${x}`);
@@ -107,12 +108,12 @@ class Game {
     }
 
     // place piece in board and add to HTML table
-    board[y][x] = currPlayer;
+    board[y][x] = this.currPlayer;
     placeInTable(y, x);
 
     // check for win
     if (checkForWin()) {
-      return endGame(`Player ${currPlayer} won!`);
+      return endGame(`Player ${this.currPlayer} won!`);
     }
 
     // check for tie
@@ -121,7 +122,7 @@ class Game {
     }
 
     // switch players
-    currPlayer = currPlayer === 1 ? 2 : 1;
+    this.currPlayer = this.currPlayer === 1 ? 2 : 1;
   }
 
 
@@ -139,7 +140,7 @@ class Game {
           y < this.height &&
           x >= 0 &&
           x < this.width &&
-          board[y][x] === currPlayer
+          board[y][x] === this.currPlayer
       );
     }
 
