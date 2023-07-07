@@ -22,8 +22,10 @@ class Game {
     this.width = width;
     this.currPlayer = 1;
     this.board = [];
+    this.gameOver = false;
     this.makeBoard();
-    this.makeHtmlBoard();
+    this.makeStartButton();
+    // this.makeHtmlBoard();
   }
 
   makeBoard() {
@@ -36,12 +38,13 @@ class Game {
   /** makeHtmlBoard: make HTML table and row of column tops. */
   makeHtmlBoard() {
     const board = document.getElementById('board');
+
     board.innerHTML = '';
 
     // make column tops (clickable area for adding a piece to that column)
     const top = document.createElement('tr');
     top.setAttribute('id', 'column-top');
-    top.addEventListener('click', this.handleClick);
+    top.addEventListener('click', this.handleClick.bind(this));
 
     for (let x = 0; x < this.width; x++) {
       const headCell = document.createElement('td');
@@ -63,9 +66,16 @@ class Game {
 
       board.append(row);
     }
-    console.log(board);
   }
 
+  makeStartButton() {
+    const game = document.getElementById('game');
+
+    let startButton = document.createElement('button');
+    startButton.innerText = 'Start';
+    startButton.addEventListener('click', this.makeHtmlBoard.bind(this));
+    game.append(startButton);
+  }
 
   /** findSpotForCol: given column x, return top empty y (null if filled) */
 
@@ -101,6 +111,8 @@ class Game {
   /** handleClick: handle click of column top to play piece */
 
   handleClick(evt) {
+    console.log("handleClick", this);
+
     // get x from ID of clicked cell
     const x = +evt.target.id;
 
@@ -120,7 +132,7 @@ class Game {
     }
 
     // check for tie
-    if (board.every(row => row.every(cell => cell))) {
+    if (this.board.every(row => row.every(cell => cell))) {
       return endGame('Tie!');
     }
 
@@ -162,7 +174,6 @@ class Game {
         }
       }
     }
-
   }
 }
 
