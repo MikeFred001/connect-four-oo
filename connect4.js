@@ -38,6 +38,7 @@ class Game {
   /** makeHtmlBoard: make HTML table and row of column tops. */
   makeHtmlBoard() {
     const board = document.getElementById('board');
+    const startButton = document.getElementById('start-button');
 
     board.innerHTML = '';
 
@@ -66,12 +67,15 @@ class Game {
 
       board.append(row);
     }
+    //this.changeStartButtonText();
+    startButton.innerHTML = 'Restart';
   }
 
   makeStartButton() {
     const game = document.getElementById('game');
 
     let startButton = document.createElement('button');
+    startButton.setAttribute('id', 'start-button');
     startButton.innerText = 'Start';
     startButton.addEventListener('click', this.makeHtmlBoard.bind(this));
     game.append(startButton);
@@ -111,6 +115,9 @@ class Game {
   /** handleClick: handle click of column top to play piece */
 
   handleClick(evt) {
+
+    if (this.gameOver === true) return;
+
     console.log("handleClick", this);
 
     // get x from ID of clicked cell
@@ -128,7 +135,7 @@ class Game {
 
     // check for win
     if (this.checkForWin()) {
-      return endGame(`Player ${this.currPlayer} won!`);
+      return this.endGame(`Player ${this.currPlayer} won!`);
     }
 
     // check for tie
@@ -170,6 +177,7 @@ class Game {
 
         // find winner (only checking each win-possibility as needed)
         if (this._win(horiz) || this._win(vert) || this._win(diagDR) || this._win(diagDL)) {
+          this.gameOver = true;
           return true;
         }
       }
